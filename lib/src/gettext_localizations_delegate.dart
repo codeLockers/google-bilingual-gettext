@@ -5,9 +5,10 @@ import 'gettext_localizations.dart';
 
 class GettextLocalizationsDelegate
     extends LocalizationsDelegate<GettextLocalizations> {
-  GettextLocalizationsDelegate({this.defaultLanguage = "en"});
+  GettextLocalizationsDelegate(this.sourcePath, {this.defaultLanguage = 'en'});
 
   final String defaultLanguage;
+  final String sourcePath;
 
   @override
   bool isSupported(Locale locale) => true;
@@ -17,15 +18,15 @@ class GettextLocalizationsDelegate
     var poContent = '';
     try {
       poContent = await rootBundle.loadString(
-          'lib/bilingual/${locale.languageCode}_${locale.countryCode}.po');
+          '$sourcePath/${locale.languageCode.toLowerCase()}_${locale.countryCode?.toLowerCase()}.po');
     } catch (e) {
       try {
         poContent = await rootBundle
-            .loadString('lib/bilingual/${locale.languageCode}.po');
+            .loadString('$sourcePath/${locale.languageCode.toLowerCase()}.po');
       } catch (e) {
         try {
           poContent =
-              await rootBundle.loadString('lib/bilingual/$defaultLanguage.po');
+              await rootBundle.loadString('$sourcePath/$defaultLanguage.po');
         } catch (e) {
           // Ignore error, default strings will be used.
         }
